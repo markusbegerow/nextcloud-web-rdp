@@ -1,0 +1,20 @@
+{
+    "name": "nextcloud/web-rdp",
+    "description": "Browser-based RDP client for Nextcloud",
+    "type": "nextcloud-app",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Markus Begerow",
+            "email": "kontakt@begerow-beratung.de"
+        }
+    ],
+    "require": {
+        "php": ">=8.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "OCA\\WebRdp\\": "lib/"
+        }
+    }
+}

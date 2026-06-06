@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<info xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <id>web-rdp</id>
+    <name>Web RDP</name>
+    <summary>Browser-based RDP client integrated into Nextcloud</summary>
+    <description>Connect to Windows and Linux desktops via RDP directly in your browser. Connections are stored securely with encrypted credentials.</description>
+    <version>1.0.0</version>
+    <licence>gpl</licence>
+    <author mail="mail@markus-begerow.de">Markus Begerow</author>
+    <namespace>WebRdp</namespace>
+    <category>tools</category>
+    <website>https://github.com/markusbegerow/nextcloud-web-rdp</website>
+    <bugs>https://github.com/markusbegerow/nextcloud-web-rdp/issues</bugs>
+    <repository type="git">https://github.com/markusbegerow/nextcloud-web-rdp.git</repository>
+    <dependencies>
+        <nextcloud min-version="27" max-version="33"/>
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>Web RDP</name>
+            <route>web-rdp.page.index</route>
+            <icon>app.svg</icon>
+        </navigation>
+    </navigations>
+    <settings>
+        <admin>OCA\WebRdp\Settings\AdminSettings</admin>
+    </settings>
+</info>

@@ -1,0 +1,186 @@
+/* web-rdp app styles */
+
+#web-rdp-root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+}
+
+/* Connection list sidebar */
+.web-rdp-nav-item {
+    padding: 4px 8px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-main-text);
+}
+
+.web-rdp-nav-item:hover {
+    background-color: var(--color-background-hover);
+}
+
+.web-rdp-nav-item.active {
+    background-color: var(--color-primary-element-light);
+    font-weight: bold;
+}
+
+/* Main content area */
+.web-rdp-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* RDP viewer */
+.web-rdp-viewer {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #1a1a1a;
+    overflow: hidden;
+    position: relative;
+}
+
+.web-rdp-viewer-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background-color: var(--color-main-background);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+}
+
+.web-rdp-viewer-toolbar .connection-name {
+    font-weight: 600;
+    flex: 1;
+}
+
+.web-rdp-status-chip {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 999px;
+    font-weight: 600;
+}
+
+.web-rdp-status-chip.connecting {
+    background-color: var(--color-warning);
+    color: #000;
+}
+
+.web-rdp-status-chip.connected {
+    background-color: var(--color-success);
+    color: #fff;
+}
+
+.web-rdp-status-chip.disconnected,
+.web-rdp-status-chip.error {
+    background-color: var(--color-error);
+    color: #fff;
+}
+
+.web-rdp-display-wrapper {
+    flex: 1;
+    overflow: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    background-color: #1a1a1a;
+}
+
+.web-rdp-display-wrapper canvas {
+    display: block;
+    cursor: default;
+}
+
+/* Empty state */
+.web-rdp-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 16px;
+    color: var(--color-text-maxcontrast);
+}
+
+.web-rdp-empty-state .icon-computer {
+    font-size: 64px;
+    opacity: 0.4;
+}
+
+/* Connection form */
+.web-rdp-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.web-rdp-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+.web-rdp-resolution-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+/* Admin settings */
+.web-rdp-admin-form {
+    max-width: 600px;
+}
+
+.web-rdp-admin-form .form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.web-rdp-admin-form label {
+    font-weight: 600;
+}
+
+.web-rdp-admin-form .hint {
+    font-size: 0.85em;
+    color: var(--color-text-maxcontrast);
+}
+
+.web-rdp-admin-form .input-wide {
+    width: 100%;
+    max-width: 400px;
+}
+
+/* Fullscreen overrides */
+.web-rdp-viewer:-webkit-full-screen {
+    width: 100vw;
+    height: 100vh;
+}
+
+.web-rdp-viewer:fullscreen {
+    width: 100vw;
+    height: 100vh;
+}
+
+.web-rdp-viewer:fullscreen .web-rdp-viewer-toolbar {
+    display: none;
+}
+
+/* Vertically center lucide icons with their text label in NcActionButton.
+   !important needed: library CSS uses scoped [data-v-*] selectors injected
+   after our <link> tag, winning the cascade at equal specificity. */
+.action-button {
+    align-items: center !important;
+}
+.action-button__icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
