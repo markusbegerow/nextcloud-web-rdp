@@ -157,6 +157,12 @@ The RDP session opens in the main area.
 
 ---
 
+### Keyboard layout
+
+The RDP keyboard layout (`server-layout`) is derived automatically from the user's Nextcloud locale
+(Personal settings → Language / Locale): `de_DE` → `de-de-qwertz`, `de_CH` → `de-ch-qwertz`,
+`en_US` → `en-us-qwerty`, `en_GB` → `en-gb-qwerty`, and so on. Unknown locales fall back to `en-us-qwerty`.
+
 ## Troubleshooting
 
 ### Black / blank screen after connecting

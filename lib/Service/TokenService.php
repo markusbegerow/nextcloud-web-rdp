@@ -17,7 +17,7 @@ class TokenService {
      * IV uses bytes 0–127 only: guacamole-lite decodes IV via .toString('ascii') which
      * strips bit 7 of bytes >= 128, so limiting to 0–127 avoids IV corruption.
      */
-    public function generateToken(array $connectionData): string {
+    public function generateToken(array $connectionData, string $keyboardLayout = 'en-us-qwerty'): string {
         $secret = $this->config->getAppValue('web-rdp', 'guac_secret', '');
 
         $payload = json_encode([
@@ -35,6 +35,7 @@ class TokenService {
                     'dpi'          => '96',
                     'ignore-cert'  => 'true',
                     'security'     => 'any',
+                    'server-layout' => $keyboardLayout,
                 ],
             ],
         ]);
@@ -57,6 +58,35 @@ class TokenService {
         ]);
 
         return base64_encode($data);
+    }
+
+    /**
+     * Maps a Nextcloud locale (e.g. "de_DE", "en_GB") to a guacd RDP "server-layout" value.
+     */
+    public function layoutFromLocale(string $locale): string {
+        $locale = str_replace('-', '_', $locale);
+        $exact = [
+            'de_CH' => 'de-ch-qwertz',
+            'en_GB' => 'en-gb-qwerty',
+            'pt_BR' => 'pt-br-qwerty',
+        ];
+        if (isset($exact[$locale])) {
+            return $exact[$locale];
+        }
+
+        $byLanguage = [
+            'de' => 'de-de-qwertz',
+            'en' => 'en-us-qwerty',
+            'fr' => 'fr-fr-azerty',
+            'es' => 'es-es-qwerty',
+            'it' => 'it-it-qwerty',
+            'sv' => 'sv-se-qwerty',
+            'tr' => 'tr-tr-qwerty',
+            'ja' => 'ja-jp-qwerty',
+        ];
+        $language = strtolower(explode('_', $locale)[0]);
+
+        return $byLanguage[$language] ?? 'en-us-qwerty';
     }
 
     public function getWsUrl(): string {

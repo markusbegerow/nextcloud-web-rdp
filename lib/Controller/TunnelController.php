@@ -9,6 +9,7 @@ use OCA\WebRdp\Service\TokenService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use OCP\L10N\IFactory;
 use OCP\IUserSession;
 
 class TunnelController extends Controller {
@@ -18,6 +19,7 @@ class TunnelController extends Controller {
         private ConnectionService $connectionService,
         private TokenService $tokenService,
         private IUserSession $userSession,
+        private IFactory $l10nFactory,
     ) {
         parent::__construct($appName, $request);
     }
@@ -29,7 +31,9 @@ class TunnelController extends Controller {
         $userId = $this->userSession->getUser()->getUID();
         try {
             $connectionData = $this->connectionService->getDecrypted($id, $userId);
-            $token = $this->tokenService->generateToken($connectionData);
+            $locale = $this->l10nFactory->findLocale() ?? $this->l10nFactory->findLanguage();
+            $layout = $this->tokenService->layoutFromLocale((string)$locale);
+            $token = $this->tokenService->generateToken($connectionData, $layout);
             $wsUrl = $this->tokenService->getWsUrl();
             return new DataResponse(['token' => $token, 'wsUrl' => $wsUrl]);
         } catch (\Exception $e) {
