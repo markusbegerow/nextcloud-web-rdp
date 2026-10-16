@@ -13,6 +13,7 @@ class ConnectionService {
     public function __construct(
         private RdpConnectionMapper $mapper,
         private ICrypto $crypto,
+        private TokenService $tokenService,
     ) {}
 
     /** @return array[] */
@@ -37,6 +38,7 @@ class ConnectionService {
         $conn->setDomain($domain ? trim($domain) : null);
         $conn->setWidth((int)($data['width'] ?? 1920));
         $conn->setHeight((int)($data['height'] ?? 1080));
+        $conn->setKeyboardLayout($this->tokenService->sanitizeLayout($data['keyboardLayout'] ?? null));
         $conn->setCreatedAt((new \DateTime())->format('Y-m-d H:i:s'));
 
         return $this->mapper->insert($conn)->toArray();
@@ -57,6 +59,9 @@ class ConnectionService {
         $conn->setDomain($domain ? trim($domain) : null);
         $conn->setWidth((int)($data['width'] ?? 1920));
         $conn->setHeight((int)($data['height'] ?? 1080));
+        if (array_key_exists('keyboardLayout', $data)) {
+            $conn->setKeyboardLayout($this->tokenService->sanitizeLayout($data['keyboardLayout']));
+        }
 
         return $this->mapper->update($conn)->toArray();
     }

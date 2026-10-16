@@ -60,6 +60,21 @@ class TokenService {
         return base64_encode($data);
     }
 
+    private const SUPPORTED_LAYOUTS = [
+        'da-dk-qwerty', 'de-ch-qwertz', 'de-de-qwertz', 'en-gb-qwerty', 'en-us-qwerty',
+        'es-es-qwerty', 'es-latam-qwerty', 'fr-be-azerty', 'fr-ch-qwertz', 'fr-fr-azerty',
+        'hu-hu-qwertz', 'it-it-qwerty', 'ja-jp-qwerty', 'no-no-qwerty', 'pl-pl-qwerty',
+        'pt-br-qwerty', 'pt-pt-qwerty', 'ro-ro-qwerty', 'sv-se-qwerty', 'tr-tr-qwerty',
+    ];
+
+    /**
+     * Returns the layout if guacd knows it, null otherwise.
+     */
+    public function sanitizeLayout(?string $layout): ?string {
+        $layout = strtolower(trim((string)$layout));
+        return in_array($layout, self::SUPPORTED_LAYOUTS, true) ? $layout : null;
+    }
+
     /**
      * Maps a Nextcloud locale (e.g. "de_DE", "en_GB") to a guacd RDP "server-layout" value.
      */
@@ -81,6 +96,13 @@ class TokenService {
             'es' => 'es-es-qwerty',
             'it' => 'it-it-qwerty',
             'sv' => 'sv-se-qwerty',
+            'da' => 'da-dk-qwerty',
+            'nb' => 'no-no-qwerty',
+            'nn' => 'no-no-qwerty',
+            'pl' => 'pl-pl-qwerty',
+            'pt' => 'pt-pt-qwerty',
+            'hu' => 'hu-hu-qwertz',
+            'ro' => 'ro-ro-qwerty',
             'tr' => 'tr-tr-qwerty',
             'ja' => 'ja-jp-qwerty',
         ];

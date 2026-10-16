@@ -91,7 +91,8 @@ export default {
             let tokenData
             try {
                 const { data } = await axios.post(
-                    generateUrl(`/apps/web-rdp/api/tunnel/${this.connectionId}`)
+                    generateUrl(`/apps/web-rdp/api/tunnel/${this.connectionId}`),
+                    { layout: await this.detectLayout() }
                 )
                 tokenData = data
             } catch (e) {
@@ -169,6 +170,29 @@ export default {
             this.mouse.onmousemove = sendMouse
 
             this.client.connect(`token=${encodeURIComponent(tokenData.token)}`)
+        },
+
+        // Best-effort guacd "server-layout" from the browser's physical keyboard layout.
+        // Returns null when unknown; the server then falls back to the user's language.
+        async detectLayout() {
+            try {
+                const map = await navigator.keyboard?.getLayoutMap?.()
+                if (map) {
+                    const y = map.get('KeyY')
+                    const z = map.get('KeyZ')
+                    const q = map.get('KeyQ')
+                    if (y === 'z' && z === 'y') {
+                        return q === 'a' ? 'fr-ch-qwertz' : 'de-de-qwertz'
+                    }
+                    if (q === 'a') return 'fr-fr-azerty'
+                    if (map.get('Backquote') === '`' && map.get('IntlBackslash') === '\\') return 'en-gb-qwerty'
+                    if (y === 'y' && z === 'z') return 'en-us-qwerty'
+                }
+            } catch (e) { /* unsupported (Firefox/Safari) */ }
+            const lang = (navigator.language || '').toLowerCase()
+            if (lang === 'de-ch') return 'de-ch-qwertz'
+            if (lang.startsWith('de')) return 'de-de-qwertz'
+            return null
         },
 
         disconnect() {

@@ -12,6 +12,7 @@ A Nextcloud app that lets users open RDP (Remote Desktop Protocol) sessions dire
 - Live RDP sessions rendered in the browser via Apache Guacamole
 - Passwords stored encrypted in the Nextcloud database
 - Configurable resolution per connection (720p, 1080p, 1440p, or custom)
+- Keyboard layout selectable per connection or as a default, with automatic detection
 - Fullscreen mode
 - Works in any modern browser; no plugins required
 
@@ -159,11 +160,47 @@ The RDP session opens in the main area.
 
 ### Keyboard layout
 
-The RDP keyboard layout (`server-layout`) is derived automatically from the user's Nextcloud locale
-(Personal settings → Language / Locale): `de_DE` → `de-de-qwertz`, `de_CH` → `de-ch-qwertz`,
-`en_US` → `en-us-qwerty`, `en_GB` → `en-gb-qwerty`, and so on. Unknown locales fall back to `en-us-qwerty`.
+The RDP keyboard layout (`server-layout`) must match the keyboard layout of the **remote Windows computer**.
+guacd translates keys into scancodes for that layout, so a mismatch swaps keys (typically `z` and `y`).
+
+You can set it in two places:
+
+- **Settings dialog** → *Keyboard layout of the remote computer*: the default for all your connections.
+- **Connection form** → *Keyboard layout of this computer*: overrides the default for one connection.
+
+If nothing is set, the layout is detected automatically. The first match wins:
+
+1. Layout saved on the connection
+2. Default from the settings dialog
+3. Layout detected in the browser (`navigator.keyboard.getLayoutMap()`, Chromium only; otherwise `navigator.language`)
+4. Nextcloud language, then Nextcloud locale (`de` → `de-de-qwertz`, `en_GB` → `en-gb-qwerty`, …)
+5. `en-us-qwerty`
+
+Supported layouts:
+
+| Value | Layout | Value | Layout |
+|---|---|---|---|
+| `de-de-qwertz` | Deutsch (DE) | `sv-se-qwerty` | Svenska |
+| `de-ch-qwertz` | Deutsch (CH) | `da-dk-qwerty` | Dansk |
+| `en-us-qwerty` | English (US) | `no-no-qwerty` | Norsk |
+| `en-gb-qwerty` | English (UK) | `pl-pl-qwerty` | Polski |
+| `fr-fr-azerty` | Français (FR) | `hu-hu-qwertz` | Magyar |
+| `fr-be-azerty` | Français (BE) | `ro-ro-qwerty` | Română |
+| `fr-ch-qwertz` | Français (CH) | `tr-tr-qwerty` | Türkçe |
+| `es-es-qwerty` | Español (ES) | `ja-jp-qwerty` | 日本語 |
+| `es-latam-qwerty` | Español (LatAm) | `pt-pt-qwerty` | Português (PT) |
+| `it-it-qwerty` | Italiano | `pt-br-qwerty` | Português (BR) |
+
+> **Upgrading:** this feature adds a `keyboard_layout` column. Apply the migration with
+> `occ app:disable web-rdp && occ app:enable web-rdp`.
 
 ## Troubleshooting
+
+### Wrong characters or `z` / `y` swapped
+
+The keyboard layout sent to the remote computer does not match its actual layout. Set the correct
+layout in the settings dialog or in the connection form (see [Keyboard layout](#keyboard-layout)),
+then reconnect. An already running session keeps its old layout.
 
 ### Black / blank screen after connecting
 

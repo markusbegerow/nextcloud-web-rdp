@@ -1,0 +1,23 @@
+// guacd "server-layout" values; keep in sync with TokenService::SUPPORTED_LAYOUTS
+export const KEYBOARD_LAYOUTS = [
+    { value: 'de-de-qwertz',    label: 'Deutsch (DE)' },
+    { value: 'de-ch-qwertz',    label: 'Deutsch (CH)' },
+    { value: 'en-us-qwerty',    label: 'English (US)' },
+    { value: 'en-gb-qwerty',    label: 'English (UK)' },
+    { value: 'fr-fr-azerty',    label: 'Français (FR)' },
+    { value: 'fr-be-azerty',    label: 'Français (BE)' },
+    { value: 'fr-ch-qwertz',    label: 'Français (CH)' },
+    { value: 'es-es-qwerty',    label: 'Español (ES)' },
+    { value: 'es-latam-qwerty', label: 'Español (LatAm)' },
+    { value: 'it-it-qwerty',    label: 'Italiano' },
+    { value: 'pt-pt-qwerty',    label: 'Português (PT)' },
+    { value: 'pt-br-qwerty',    label: 'Português (BR)' },
+    { value: 'sv-se-qwerty',    label: 'Svenska' },
+    { value: 'da-dk-qwerty',    label: 'Dansk' },
+    { value: 'no-no-qwerty',    label: 'Norsk' },
+    { value: 'pl-pl-qwerty',    label: 'Polski' },
+    { value: 'hu-hu-qwertz',    label: 'Magyar' },
+    { value: 'ro-ro-qwerty',    label: 'Română' },
+    { value: 'tr-tr-qwerty',    label: 'Türkçe' },
+    { value: 'ja-jp-qwerty',    label: '日本語' },
+]

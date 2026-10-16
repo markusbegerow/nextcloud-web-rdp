@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OCA\WebRdp\Controller;
 
+use OCA\WebRdp\Service\TokenService;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\IConfig;
@@ -16,6 +17,7 @@ class SettingsController extends Controller {
         IRequest $request,
         private IConfig $config,
         private IUserSession $userSession,
+        private TokenService $tokenService,
     ) {
         parent::__construct($appName, $request);
     }
@@ -48,6 +50,9 @@ class SettingsController extends Controller {
         return new DataResponse([
             'defaultResolution' => $this->config->getUserValue($userId, 'web-rdp', 'default_resolution', '1920x1080'),
             'autoReconnect'     => $this->config->getUserValue($userId, 'web-rdp', 'auto_reconnect', 'false') === 'true',
+            'keyboardLayout'    => $this->tokenService->sanitizeLayout(
+                $this->config->getUserValue($userId, 'web-rdp', 'keyboard_layout', '')
+            ) ?? '',
         ]);
     }
 
@@ -66,6 +71,12 @@ class SettingsController extends Controller {
         }
         if (array_key_exists('autoReconnect', $params)) {
             $this->config->setUserValue($userId, 'web-rdp', 'auto_reconnect', $params['autoReconnect'] ? 'true' : 'false');
+        }
+
+        if (array_key_exists('keyboardLayout', $params)) {
+            // empty string = automatic
+            $layout = $this->tokenService->sanitizeLayout($params['keyboardLayout']) ?? '';
+            $this->config->setUserValue($userId, 'web-rdp', 'keyboard_layout', $layout);
         }
 
         return new DataResponse(['status' => 'ok']);

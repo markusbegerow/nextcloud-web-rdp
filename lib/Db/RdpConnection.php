@@ -26,6 +26,8 @@ use OCP\AppFramework\Db\Entity;
  * @method void setWidth(int $width)
  * @method int getHeight()
  * @method void setHeight(int $height)
+ * @method string|null getKeyboardLayout()
+ * @method void setKeyboardLayout(?string $keyboardLayout)
  * @method string getCreatedAt()
  * @method void setCreatedAt(string $createdAt)
  */
@@ -39,6 +41,7 @@ class RdpConnection extends Entity {
     protected ?string $domain = null;
     protected int $width = 1920;
     protected int $height = 1080;
+    protected ?string $keyboardLayout = null;
     protected string $createdAt = '';
 
     public function __construct() {
@@ -57,6 +60,7 @@ class RdpConnection extends Entity {
             'domain'    => $this->getDomain(),
             'width'     => $this->getWidth(),
             'height'    => $this->getHeight(),
+            'keyboardLayout' => $this->getKeyboardLayout(),
             'createdAt' => $this->getCreatedAt(),
         ];
     }

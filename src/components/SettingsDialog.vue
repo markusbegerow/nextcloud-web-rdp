@@ -17,6 +17,16 @@
             </div>
 
             <div class="web-rdp-settings-group">
+                <label class="web-rdp-settings-label" for="web-rdp-keyboard-layout">
+                    {{ t('web-rdp', 'Keyboard layout of the remote computer') }}
+                </label>
+                <select id="web-rdp-keyboard-layout" v-model="form.keyboardLayout" class="web-rdp-select">
+                    <option value="">{{ t('web-rdp', 'Automatic (browser / language)') }}</option>
+                    <option v-for="l in layouts" :key="l.value" :value="l.value">{{ l.label }}</option>
+                </select>
+            </div>
+
+            <div class="web-rdp-settings-group">
                 <label class="web-rdp-settings-label web-rdp-checkbox-label">
                     <input
                         v-model="form.autoReconnect"
@@ -55,6 +65,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { NcModal, NcButton, NcNoteCard } from '@nextcloud/vue'
+import { KEYBOARD_LAYOUTS } from '../layouts.js'
 
 export default {
     name: 'SettingsDialog',
@@ -70,7 +81,9 @@ export default {
             form: {
                 defaultResolution: '1920x1080',
                 autoReconnect: false,
+                keyboardLayout: '',
             },
+            layouts: KEYBOARD_LAYOUTS,
             loading: false,
             error: null,
             adminUrl: generateUrl('/settings/admin/connected-accounts'),
@@ -87,6 +100,7 @@ export default {
                 const { data } = await axios.get(generateUrl('/apps/web-rdp/api/user-settings'))
                 this.form.defaultResolution = data.defaultResolution ?? '1920x1080'
                 this.form.autoReconnect = !!data.autoReconnect
+                this.form.keyboardLayout = data.keyboardLayout ?? ''
             } catch (e) {
                 // use defaults on error
             }

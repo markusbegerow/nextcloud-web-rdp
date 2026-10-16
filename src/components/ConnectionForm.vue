@@ -51,6 +51,14 @@
                     :label="t('web-rdp', 'Domain (optional)')"
                     :placeholder="t('web-rdp', 'MYDOMAIN')" />
 
+                <div class="layout-field">
+                    <label for="web-rdp-conn-layout">{{ t('web-rdp', 'Keyboard layout of this computer') }}</label>
+                    <select id="web-rdp-conn-layout" v-model="form.keyboardLayout" class="web-rdp-select">
+                        <option value="">{{ t('web-rdp', 'Use default from settings') }}</option>
+                        <option v-for="l in layouts" :key="l.value" :value="l.value">{{ l.label }}</option>
+                    </select>
+                </div>
+
                 <div class="resolution-field">
                     <label>{{ t('web-rdp', 'Resolution') }}</label>
                     <div class="web-rdp-resolution-presets">
@@ -99,6 +107,7 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { NcModal, NcTextField, NcButton, NcNoteCard } from '@nextcloud/vue'
 import { Eye, EyeOff } from 'lucide-vue-next'
+import { KEYBOARD_LAYOUTS } from '../layouts.js'
 
 const PRESETS = [
     { label: '1280×720',  width: 1280, height: 720  },
@@ -129,7 +138,9 @@ export default {
                 domain:   c?.domain   ?? '',
                 width:    c?.width    ?? (dw || 1920),
                 height:   c?.height   ?? (dh || 1080),
+                keyboardLayout: c?.keyboardLayout ?? '',
             },
+            layouts: KEYBOARD_LAYOUTS,
             showPassword: false,
             loading: false,
             error: null,
@@ -197,6 +208,21 @@ export default {
     gap: 4px;
 }
 
+.web-rdp-select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 2px solid var(--color-border-dark, #ccc);
+    border-radius: var(--border-radius, 4px);
+    background: var(--color-main-background);
+    color: var(--color-main-text);
+    font-size: 1em;
+}
+
+.layout-field {
+    margin: 12px 0;
+}
+
+.layout-field label,
 .resolution-field label {
     font-weight: 600;
     display: block;
